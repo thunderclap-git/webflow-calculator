@@ -1,7 +1,6 @@
-import { greetUser } from '$utils/greet';
+import WebflowCalculator from '$utils/webflowCalculator';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  const name = 'John Doe';
-  greetUser(name);
+  WebflowCalculator();
 });
