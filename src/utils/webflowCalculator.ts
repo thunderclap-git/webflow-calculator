@@ -17,7 +17,6 @@ const WebflowCalculator = () => {
         console.log("Results", results.length)
         console.groupEnd()
 
-        // initial calculate
 
         // add event listener to all inputs
         inputs.forEach(input => {
@@ -30,6 +29,8 @@ const WebflowCalculator = () => {
             })
 
         })
+
+        // initial calculate
         calculate(results, calculator)
 
     })
@@ -53,7 +54,6 @@ const WebflowCalculator = () => {
         // replace attribute values with actual values if found in the value string
         const replaceValues = feildValue.split(
             // regex to replace all values in the string that are inside the curly braces
-            // example feildValue = "1200 + (30 + {attr.amount})"
             /{([^}]+)}/g
         )
 
@@ -64,16 +64,15 @@ const WebflowCalculator = () => {
                 const elm: HTMLInputElement = calculator.querySelector(`[${INPUT_ATTRIBUTE}=${i.replace('attr.', '')} ]`)
                 return elm.value ? elm.value : 0
 
-                // {attr.pages} + {checked.fast-delivery ? (+250) : (-250) }
             } else if (i.includes('checked.')) {
                 const checkedValue = i.split('?')[0]
-                const value = i.split('?')[1].split(':')[0]
+                const value = i.split('?')[1]
                 const checkedElm: HTMLInputElement = calculator.querySelector(`[${INPUT_ATTRIBUTE}=${checkedValue.replace('checked.', '')} ]`)!
                 return checkedElm.checked ? value : (checkedElm.getAttribute('default-value') || '0')
 
             } else if (i.includes('unchecked.')) {
                 const checkedValue = i.split('?')[0]
-                const value = i.split('?')[1].split(':')[1]
+                const value = i.split('?')[1]
                 const checkedElm: HTMLInputElement = calculator.querySelector(`[${INPUT_ATTRIBUTE}=${checkedValue.replace('unchecked.', '')} ]`)!
                 return checkedElm.checked ? (checkedElm.getAttribute('default-value') || '0') : value
             }
@@ -81,6 +80,7 @@ const WebflowCalculator = () => {
         })
 
         try {
+            console.log(replacedValues.join(''))
             let result = eval(replacedValues.join(''))
             return parseFloat(result).toFixed(2).toString();
         } catch (err) {
